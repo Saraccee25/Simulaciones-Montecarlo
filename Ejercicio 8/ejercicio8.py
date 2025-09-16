@@ -8,7 +8,7 @@ GD_GANANCIA_DECAIDA = 45000      # USD por año
 GF_GANANCIA_FAMA = 100000        # USD por año
 T = 20                           # Horizonte de simulación (años)
 NUM_CANTANTES = 30              # Número inicial de cantantes
-NUM_SIMULACIONES = 50        # Número de simulaciones Monte Carlo
+NUM_SIMULACIONES = 50         # Número de simulaciones Monte Carlo
 
 # Estados posibles
 CRECIMIENTO = 0
@@ -49,9 +49,9 @@ def generar_transicion_decaida():
     else:
         return TERMINADO    # Termina carrera
 
-def simular_cantante():
+def simular_cantante(estado_inicial):
     """Simula la carrera completa de un cantante durante T años."""
-    estado_actual = CRECIMIENTO  # Todos empiezan en crecimiento
+    estado_actual = estado_inicial  # Empieza en el estado asignado
     ganancia_total = 0
     tiempo_activo = 0
     
@@ -88,6 +88,9 @@ def simular_cantante():
 # Variables acumuladas para todas las simulaciones
 cantantes_crecimiento_final = 0
 cantantes_fama_final = 0
+cantantes_decaida_final = 0
+cantantes_perdida_final = 0
+cantantes_terminado_final = 0
 cantantes_activos_20_años = 0
 tiempos_carrera = []
 ganancias_totales = []
@@ -99,15 +102,29 @@ for simulacion in range(NUM_SIMULACIONES):
     if (simulacion + 1) % 100 == 0:
         print(f"Progreso: {simulacion + 1}/{NUM_SIMULACIONES} simulaciones completadas")
     
+    # Definir distribución inicial: 20 crecimiento, 5 fama, 5 decaída
+    estados_iniciales = (
+        [CRECIMIENTO] * 20 +  # 20 cantantes en crecimiento
+        [FAMA] * 5 +          # 5 cantantes en fama  
+        [DECAIDA] * 5         # 5 cantantes en decaída
+    )
+    
     # Simular los 30 cantantes de esta simulación
     for cantante in range(NUM_CANTANTES):
-        resultado = simular_cantante()
+        estado_inicial = estados_iniciales[cantante]
+        resultado = simular_cantante(estado_inicial)
         
         # Acumular estadísticas
         if resultado['estado_final'] == CRECIMIENTO:
             cantantes_crecimiento_final += 1
         elif resultado['estado_final'] == FAMA:
             cantantes_fama_final += 1
+        elif resultado['estado_final'] == DECAIDA:
+            cantantes_decaida_final += 1
+        elif resultado['estado_final'] == PERDIDA:
+            cantantes_perdida_final += 1
+        elif resultado['estado_final'] == TERMINADO:
+            cantantes_terminado_final += 1
             
         if resultado['tiempo_activo'] == 20:
             cantantes_activos_20_años += 1
@@ -122,13 +139,21 @@ total_cantantes = NUM_SIMULACIONES * NUM_CANTANTES
 print("\nResultados de la simulación de Monte Carlo (Carrera de Cantantes):")
 print("=" * 70)
 
-# (a) ¿Cuántos cantantes hay actualmente en crecimiento?
-print(f"(a) Cantantes en estado de crecimiento al final de 20 años:")
-print(f"    Total: {cantantes_crecimiento_final} de {total_cantantes}")
-print(f"    Porcentaje: {cantantes_crecimiento_final/total_cantantes*100:.2f}%")
+# (a) ¿Cuántos cantantes dejaron de ser cantantes en 20 años?
+cantantes_que_dejaron_carrera = cantantes_perdida_final + cantantes_terminado_final
 
-# Información adicional de estados finales
-print(f"    Cantantes en fama al final: {cantantes_fama_final} ({cantantes_fama_final/total_cantantes*100:.2f}%)")
+print(f"(a) Cantantes que dejaron de ser cantantes al final de 20 años:")
+print(f"    Total que abandonaron: {cantantes_que_dejaron_carrera} de {total_cantantes}")
+print(f"    Porcentaje: {cantantes_que_dejaron_carrera/total_cantantes*100:.2f}%")
+print(f"    - Por pérdida de carrera: {cantantes_perdida_final}")
+print(f"    - Por terminar carrera (decaída→terminado): {cantantes_terminado_final}")
+
+# Cantantes que siguieron activos
+cantantes_activos = cantantes_crecimiento_final + cantantes_fama_final + cantantes_decaida_final
+print(f"    Cantantes aún activos: {cantantes_activos} ({cantantes_activos/total_cantantes*100:.2f}%)")
+print(f"    - En crecimiento: {cantantes_crecimiento_final}")
+print(f"    - En fama: {cantantes_fama_final}")
+print(f"    - En decaída: {cantantes_decaida_final}")
 
 # (b) ¿Cuál es el tiempo estimado de carrera de un cantante de reggaetón?
 tiempo_promedio = np.mean(tiempos_carrera)
@@ -160,18 +185,29 @@ print(f"Número total de simulaciones: {NUM_SIMULACIONES}")
 print(f"Cantantes simulados por simulación: {NUM_CANTANTES}")
 print(f"Total de cantantes simulados: {total_cantantes}")
 print(f"Horizonte de simulación: {T} años")
+print(f"\nDistribución inicial por simulación:")
+print(f"    - 20 cantantes empiezan en CRECIMIENTO")
+print(f"    - 5 cantantes empiezan en FAMA") 
+print(f"    - 5 cantantes empiezan en DECAÍDA")
 
 # Distribución de estados finales
 estados_nombres = ['Crecimiento', 'Fama', 'Decaída', 'Pérdida', 'Terminado']
 print(f"\nDistribución de estados finales:")
 
-# Contar todos los estados finales
-conteo_estados = [0] * 5
-for simulacion in range(NUM_SIMULACIONES):
-    for cantante in range(NUM_CANTANTES):
-        resultado = simular_cantante()
-        conteo_estados[resultado['estado_final']] += 1
+# Usar los contadores ya calculados durante la simulación principal
+conteo_estados = [
+    cantantes_crecimiento_final,
+    cantantes_fama_final, 
+    cantantes_decaida_final,
+    cantantes_perdida_final,
+    cantantes_terminado_final
+]
 
 for i, nombre in enumerate(estados_nombres):
     porcentaje = (conteo_estados[i] / total_cantantes) * 100
     print(f"    {nombre}: {conteo_estados[i]} cantantes ({porcentaje:.2f}%)")
+
+# Resumen de cantantes que dejaron la carrera
+print(f"\nResumen:")
+print(f"    Total cantantes que DEJARON de ser cantantes: {cantantes_que_dejaron_carrera} ({cantantes_que_dejaron_carrera/total_cantantes*100:.2f}%)")
+print(f"    Total cantantes que AÚN SIGUEN activos: {cantantes_activos} ({cantantes_activos/total_cantantes*100:.2f}%)")
