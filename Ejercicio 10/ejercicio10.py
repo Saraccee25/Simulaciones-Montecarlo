@@ -9,10 +9,10 @@ CND = 30000             # Costo por no tener auto disponible
 CO = 7500               # Costo por tener auto ocioso/día
 NA_dist = {0: 0.10, 1: 0.10, 2: 0.25, 3: 0.30, 4: 0.25}
 ND_dist = {1: 0.40, 2: 0.35, 3: 0.15, 4: 0.10}
-TS = 10000
+TS = 365
 
 # Rango de autos a evaluar
-rango_N = range(8)  # Desde 0 hasta 7 autos
+rango_N = range(5)  # Desde 0 hasta 7 autos
 
 
 # Paso 2
