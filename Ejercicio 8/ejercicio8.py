@@ -145,15 +145,6 @@ cantantes_que_dejaron_carrera = cantantes_perdida_final + cantantes_terminado_fi
 print(f"(a) Cantantes que dejaron de ser cantantes al final de 20 años:")
 print(f"    Total que abandonaron: {cantantes_que_dejaron_carrera} de {total_cantantes}")
 print(f"    Porcentaje: {cantantes_que_dejaron_carrera/total_cantantes*100:.2f}%")
-print(f"    - Por pérdida de carrera: {cantantes_perdida_final}")
-print(f"    - Por terminar carrera (decaída→terminado): {cantantes_terminado_final}")
-
-# Cantantes que siguieron activos
-cantantes_activos = cantantes_crecimiento_final + cantantes_fama_final + cantantes_decaida_final
-print(f"    Cantantes aún activos: {cantantes_activos} ({cantantes_activos/total_cantantes*100:.2f}%)")
-print(f"    - En crecimiento: {cantantes_crecimiento_final}")
-print(f"    - En fama: {cantantes_fama_final}")
-print(f"    - En decaída: {cantantes_decaida_final}")
 
 # (b) ¿Cuál es el tiempo estimado de carrera de un cantante de reggaetón?
 tiempo_promedio = np.mean(tiempos_carrera)
@@ -162,9 +153,6 @@ tiempo_std = np.std(tiempos_carrera)
 
 print(f"\n(b) Tiempo estimado de carrera de un cantante de reggaetón:")
 print(f"    Tiempo promedio: {tiempo_promedio:.2f} años")
-print(f"    Tiempo mediano: {tiempo_mediana:.2f} años")
-print(f"    Desviación estándar: {tiempo_std:.2f} años")
-print(f"    Cantantes que completaron 20 años activos: {cantantes_activos_20_años}")
 
 # (c) Dinero promedio que gana un cantante de reggaetón en 20 años
 ganancia_promedio = np.mean(ganancias_totales)
@@ -173,26 +161,9 @@ ganancia_std = np.std(ganancias_totales)
 
 print(f"\n(c) Dinero promedio que gana un cantante de reggaetón en 20 años:")
 print(f"    Ganancia promedio total: ${ganancia_promedio:,.2f} USD")
-print(f"    Ganancia mediana total: ${ganancia_mediana:,.2f} USD")
-print(f"    Desviación estándar: ${ganancia_std:,.2f} USD")
 print(f"    Ganancia anual promedio: ${ganancia_promedio/20:,.2f} USD")
 
 print("=" * 70)
-
-# Estadísticas adicionales
-print(f"\nEstadísticas generales:")
-print(f"Número total de simulaciones: {NUM_SIMULACIONES}")
-print(f"Cantantes simulados por simulación: {NUM_CANTANTES}")
-print(f"Total de cantantes simulados: {total_cantantes}")
-print(f"Horizonte de simulación: {T} años")
-print(f"\nDistribución inicial por simulación:")
-print(f"    - 20 cantantes empiezan en CRECIMIENTO")
-print(f"    - 5 cantantes empiezan en FAMA") 
-print(f"    - 5 cantantes empiezan en DECAÍDA")
-
-# Distribución de estados finales
-estados_nombres = ['Crecimiento', 'Fama', 'Decaída', 'Pérdida', 'Terminado']
-print(f"\nDistribución de estados finales:")
 
 # Usar los contadores ya calculados durante la simulación principal
 conteo_estados = [
@@ -202,12 +173,3 @@ conteo_estados = [
     cantantes_perdida_final,
     cantantes_terminado_final
 ]
-
-for i, nombre in enumerate(estados_nombres):
-    porcentaje = (conteo_estados[i] / total_cantantes) * 100
-    print(f"    {nombre}: {conteo_estados[i]} cantantes ({porcentaje:.2f}%)")
-
-# Resumen de cantantes que dejaron la carrera
-print(f"\nResumen:")
-print(f"    Total cantantes que DEJARON de ser cantantes: {cantantes_que_dejaron_carrera} ({cantantes_que_dejaron_carrera/total_cantantes*100:.2f}%)")
-print(f"    Total cantantes que AÚN SIGUEN activos: {cantantes_activos} ({cantantes_activos/total_cantantes*100:.2f}%)")
