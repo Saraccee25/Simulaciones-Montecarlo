@@ -1,54 +1,78 @@
 import random
 import numpy as np
 
-# Probabilidades de aprobar fases A, B, C
-p_aprobar = [0.4, 0.5, 0.2]
-num_fases = len(p_aprobar)
-TS = 100  # Número de simulaciones
+# ==============================
+# Constantes conocidas
+# ==============================
+DF = 1  # Duración de cada fase (semanas)
+fases = ["A", "B", "C"]
+p_aprobar = [0.4, 0.5, 0.2]   # Probabilidades de aprobar fases A, B, C
+NE = 100  # Número de estudiantes a simular
 
-# Resultados acumulados
-tiempos_totales = []
-tiempos_etapas = [[] for _ in range(num_fases)]
+# ==============================
+# Variables de respuesta
+# ==============================
+TC = []  # Tiempo total para completar el programa
+TE = [[] for _ in fases]  # Tiempo por etapa (lista de cada fase)
+# Tmin y Tmax se calculan después
 
-def simular_programa():
 
+# ==============================
+# Función de simulación
+# ==============================
+def simular_estudiante():
+    """
+    Simula el tiempo que tarda un estudiante en completar las 3 fases.
+    Retorna el tiempo total (TC) y el tiempo invertido en cada fase (TEi).
+    """
     tiempo_total = 0
     tiempos_por_etapa = []
 
-    for i in range(num_fases):
-        tiempo_etapa = 0
+    for i, p in enumerate(p_aprobar):
+        NR = 0   # número de veces que se presenta la prueba en esta fase
         aprobado = False
         while not aprobado:
-            tiempo_etapa += 1  # Cada intento consume 1 semana
-            tiempo_total += 1
-            if random.random() <= p_aprobar[i]:
+            NR += 1
+            tiempo_total += DF
+            if random.random() <= p:  # aprueba con probabilidad p
                 aprobado = True
-        tiempos_por_etapa.append(tiempo_etapa)
+        tiempos_por_etapa.append(NR * DF)
 
     return tiempo_total, tiempos_por_etapa
 
 
-# Ejecutar simulaciones
-for _ in range(TS):
-    tiempo_total, tiempos_por_etapa = simular_programa()
-    tiempos_totales.append(tiempo_total)
-    for i in range(num_fases):
-        tiempos_etapas[i].append(tiempos_por_etapa[i])
+# ==============================
+# Simulación Montecarlo
+# ==============================
+for _ in range(NE):
+    tiempo_total, tiempos_por_etapa = simular_estudiante()
+    TC.append(tiempo_total)
+    for i in range(len(fases)):
+        TE[i].append(tiempos_por_etapa[i])
 
-# Estadísticas
-tiempo_medio_total = np.mean(tiempos_totales)
-tiempo_min_total = np.min(tiempos_totales)
-tiempo_max_total = np.max(tiempos_totales)
-tiempo_medio_etapas = [np.mean(t) for t in tiempos_etapas]
+# ==============================
+# Resultados (Modelo Matemático)
+# ==============================
+# TEi = (DF * Sumatoria{NR}) / NE
+TE_promedio = [np.mean(te) for te in TE]
 
-# Resultados
+Tmin = np.min(TC)   # Tiempo mínimo total
+Tmax = np.max(TC)   # Tiempo máximo total
+TC_promedio = np.mean(TC)
+
+# ==============================
+# Impresión de resultados
+# ==============================
 print("Resultados de la simulación de Montecarlo (Programa de Entrenamiento):")
 print("-" * 60)
-print(f"Simulaciones realizadas: {TS}")
-for i, media in enumerate(tiempo_medio_etapas):
-    print(f"Tiempo medio en semanas en la etapa {chr(65+i)}: {media:.2f}")
+print(f"Número de estudiantes simulados (NE): {NE}")
+print("Punto a)")
+for i, media in enumerate(TE_promedio):
+    print(f"Tiempo medio (TE) en la etapa {fases[i]}: {media:.2f} semanas")
 print("-" * 60)
-print(f"Tiempo medio TOTAL en semanas: {tiempo_medio_total:.2f}")
-print(f"Tiempo mínimo TOTAL en semanas: {tiempo_min_total}")
-print(f"Tiempo máximo TOTAL en semanas: {tiempo_max_total}")
+print(f"Tiempo medio TOTAL (TC): {TC_promedio:.2f} semanas")
+
+print("Punto b)")
+print(f"Tiempo mínimo TOTAL (Tmin): {Tmin} semanas")
+print(f"Tiempo máximo TOTAL (Tmax): {Tmax} semanas")
 print("-" * 60)
