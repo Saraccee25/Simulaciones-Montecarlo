@@ -1,12 +1,12 @@
 # Paso 1
 import random
-import numpy as np
 
 # Constantes del problema
 CC = 8000    # Costo de compra de un paquete de 10 kg
 PC = 15000   # Precio de venta de un paquete de 10 kg
 CD = 1600    # Costo adicional por donación (2 kg) por paquete vendido
 PP = 0.45    # Probabilidad de pérdida de sobrante
+TS = 365 * 5  # Tiempo de simulación = 5 años (en días)
 
 # Distribución de probabilidad de la demanda diaria (PV = paquetes vendidos)
 PV_dist = {
@@ -52,10 +52,12 @@ def calcular_ganancia_dia(CO, PV, CD_actual):
 resultados_a = {}
 
 for CO in rango_CO:
-    Gdia_esperada = 0
-    for PV, prob in PV_dist.items():
-        Gdia_esperada += prob * calcular_ganancia_dia(CO, PV, CD)
-    resultados_a[CO] = Gdia_esperada
+    ganancia_total = 0
+    for _ in range(TS):  # Simular 5 años
+        PV = generar_PV(PV_dist)
+        ganancia_total += calcular_ganancia_dia(CO, PV, CD)
+    ganancia_promedio = ganancia_total / TS
+    resultados_a[CO] = ganancia_promedio
 
 CO_optimo_a = max(resultados_a, key=resultados_a.get)
 ganancia_maxima_a = resultados_a[CO_optimo_a]
@@ -65,11 +67,11 @@ print("Resultados de la simulación de Montecarlo (Croquetas):")
 print("-" * 60)
 print("Escenario (a) -> Donación de 2 kg por paquete vendido")
 for CO, Gdia in resultados_a.items():
-    print(f"CO = {CO} paquetes -> Ganancia esperada diaria = ${Gdia:,.2f}")
+    print(f"CO = {CO} paquetes -> Ganancia promedio diaria = ${Gdia:,.2f}")
 
 print("-" * 60)
 print(f"La cantidad óptima de producción es CO* = {CO_optimo_a} paquetes")
-print(f"La ganancia esperada máxima es: ${ganancia_maxima_a:,.2f}")
+print(f"La ganancia promedio máxima es: ${ganancia_maxima_a:,.2f}")
 
 
 # Paso 5 - Escenario (b): demanda +20% y donación de 4 kg
@@ -79,10 +81,12 @@ CD_nuevo = 2 * CD
 resultados_b = {}
 
 for CO in rango_CO:
-    Gdia_esperada = 0
-    for PV, prob in PV_dist_b.items():
-        Gdia_esperada += prob * calcular_ganancia_dia(CO, PV, CD_nuevo)
-    resultados_b[CO] = Gdia_esperada
+    ganancia_total = 0
+    for _ in range(TS):  # Simular 5 años
+        PV = generar_PV(PV_dist_b)
+        ganancia_total += calcular_ganancia_dia(CO, PV, CD_nuevo)
+    ganancia_promedio = ganancia_total / TS
+    resultados_b[CO] = ganancia_promedio
 
 CO_optimo_b = max(resultados_b, key=resultados_b.get)
 ganancia_maxima_b = resultados_b[CO_optimo_b]
@@ -91,11 +95,11 @@ ganancia_maxima_b = resultados_b[CO_optimo_b]
 print("\n" + "=" * 60)
 print("Escenario (b) -> Demanda +20% y Donación de 4 kg por paquete vendido")
 for CO, Gdia in resultados_b.items():
-    print(f"CO = {CO} paquetes -> Ganancia esperada diaria = ${Gdia:,.2f}")
+    print(f"CO = {CO} paquetes -> Ganancia promedio diaria = ${Gdia:,.2f}")
 
 print("-" * 60)
 print(f"La cantidad óptima de producción es CO* = {CO_optimo_b} paquetes")
-print(f"La ganancia esperada máxima es: ${ganancia_maxima_b:,.2f}")
+print(f"La ganancia promedio máxima es: ${ganancia_maxima_b:,.2f}")
 
 # Recomendación
 print("-" * 60)
