@@ -1,7 +1,6 @@
 import random
 import numpy as np
 
-random.seed(42)  # reproducibilidad
 
 # -----------------------------
 # Constantes del problema
