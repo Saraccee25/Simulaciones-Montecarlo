@@ -1,6 +1,5 @@
 # Paso 1
 import random
-import numpy as np
 
 # Constantes del problema
 Cmax = 4   # Capacidad máxima de la represa (unidades/mes)
