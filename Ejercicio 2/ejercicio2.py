@@ -95,7 +95,7 @@ ganancia_maxima_b = resultados_b[CO_optimo_b]
 print("\n" + "=" * 60)
 print("Escenario (b) -> Demanda +20% y Donación de 4 kg por paquete vendido")
 for CO, Gdia in resultados_b.items():
-    print(f"CO = {CO} paquetes -> Ganancia promedio diaria = ${Gdia:,.2f}")
+    print(f"CO = {CO * 1.2:,.2f} paquetes -> Ganancia promedio diaria = ${Gdia:,.2f}")
 
 print("-" * 60)
 print(f"La cantidad óptima de producción es CO* = {CO_optimo_b} paquetes")
