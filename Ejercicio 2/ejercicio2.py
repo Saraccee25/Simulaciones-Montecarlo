@@ -42,7 +42,12 @@ def calcular_ganancia_dia(CO, PV, CD_actual):
     ingresos = PC * vendidos
     costo_produccion = CC * CO
     costo_donacion = CD_actual * vendidos
-    costo_sobrante = PP * CC * sobrante
+
+    rand_val = random.uniform(0, 1)
+    if rand_val <= PP:
+        costo_sobrante = CC * sobrante
+    else:
+        costo_sobrante = 0
 
     Gdia = ingresos - costo_produccion - costo_donacion - costo_sobrante
     return Gdia
