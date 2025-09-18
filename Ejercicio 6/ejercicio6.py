@@ -6,13 +6,8 @@ import numpy as np
 # -------------------------------
 PV = 8000     # Precio venta revista
 CC1 = 6000    # Costo compra primera parte
-DR1D = 2400   # Pérdida después de 10 días
-U1 = 2000     # Utilidad primera parte
-
 CC2 = 4800    # Costo compra segunda parte
-DR2D = 3600   # Pérdida después de 20 días
-U2 = 3200     # Utilidad segunda parte
-
+DEV = 3600    # Precio de devolución al proveedor
 TS = 12       # Meses de simulación
 
 # -------------------------------
@@ -37,28 +32,35 @@ def generar_demanda(dist):
 # Función para simular un mes
 # -------------------------------
 def simular_mes(Q1, Q2):
-    # Demanda primera parte
+    # ----- Primera parte -----
     D1 = generar_demanda(D1_dist)
-    RV1 = min(Q1, D1)   # Revistas vendidas
-    RS1 = max(Q1 - D1, 0)  # Sobrantes
-    Ud1 = (U1 * RV1) - (RS1 * DR1D)
+    RV1 = min(Q1, D1)          # Revistas vendidas
+    RS1 = max(Q1 - D1, 0)      # Sobrantes
 
-    # Decisión: si hay sobrantes <4 se compra, si >8 se vende, si no se mantiene
-    decision = Q2
+    ingresos1 = RV1 * PV
+    costo1 = Q1 * CC1
+    devolucion1 = RS1 * DEV    # Se devuelven sobrantes a 3600
+    utilidad1 = ingresos1 + devolucion1 - costo1
+
+    # ----- Decisión segunda parte -----
     if RS1 < 4:
-        decision = Q2
+        decision = Q2   # Comprar más
     elif RS1 > 8:
-        decision = 0   # No comprar más
+        decision = 0    # No comprar más
     else:
-        decision = Q2
+        decision = Q2   # Mantener
 
-    # Demanda segunda parte
+    # ----- Segunda parte -----
     D2 = generar_demanda(D2_dist)
     RV2 = min(decision, D2)
     RS2 = max(decision - D2, 0)
-    Ud2 = (U2 * RV2) - (RS2 * DR2D)
 
-    return Ud1 + Ud2
+    ingresos2 = RV2 * PV
+    costo2 = decision * CC2
+    devolucion2 = RS2 * DEV
+    utilidad2 = ingresos2 + devolucion2 - costo2
+
+    return utilidad1 + utilidad2
 
 # -------------------------------
 # Función para simular política
