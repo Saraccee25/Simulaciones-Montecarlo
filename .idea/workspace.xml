@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c80d96ca-f5cb-456d-8d9d-07a37979bfe7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ejercicio 2/ejercicio2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ejercicio 2/ejercicio2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ejercicio 5/ejercicio5.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ejercicio 5/ejercicio5.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ejercicio 7/ejercicio7.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ejercicio 7/ejercicio7.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,12 +31,15 @@
     "Python.ejercicio1.executor": "Run",
     "Python.ejercicio10.executor": "Run",
     "Python.ejercicio2.executor": "Run",
+    "Python.ejercicio5.executor": "Run",
+    "Python.ejercicio7.executor": "Run",
     "Python.ejercicio8.executor": "Run",
     "Python.ejercicio9.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main"
+    "git-widget-placeholder": "main",
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="SharedIndexes">

@@ -8,7 +8,7 @@ import numpy as np
 CP = 200_000   # costo de producción por unidad
 CI = 30_000    # costo de mantener inventario (unidad/día)
 CND = 50_000   # costo por demanda no satisfecha (unidad)
-CCA = 180_000  # costo fijo por contratar capacidad extra (día)
+CCA = 180_000  # costo fijo por contratar capacidad extra (día) B)
 TS = 365       # horizonte de simulación = 365 días
 
 # -----------------------------
